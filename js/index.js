@@ -23,6 +23,19 @@ $(document).ready(function () {
         map.setCenter(position.coords.latitude, position.coords.longitude);
         var lat = position.coords.latitude;
         var lon = position.coords.longitude;
+        setTimeout(function () {
+          map.addMarker({
+            lat: lat,
+            lng: lon,
+            title: 'Your Location',
+            infoWindow: {
+              content: '<p>Your Location</p>'
+            },
+            click: function(e) {
+              console.log('Your Location');
+            }
+          });
+        }, 1400);
       },
       error: function(error) {
         alert('Geolocation failed: '+error.message);
@@ -34,6 +47,24 @@ $(document).ready(function () {
         console.log("Done!");
       }
     });
-
   });
-});
+
+  $('.controls').keypress(function (e) {
+    if (e.which == 13) {
+      GMaps.geocode({
+        address: $('#search').val(),
+        callback: function(results, status) {
+          if (status == 'OK') {
+            var position = results[0].geometry.location;
+            map.setCenter(position.lat(), position.lng());
+            map.addMarker({
+              lat: position.lat(),
+              lng: position.lng()
+            });
+            $('#search').val('');
+          }
+        }
+      });
+    }// End If
+  });
+});//End Code

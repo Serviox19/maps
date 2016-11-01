@@ -54,12 +54,20 @@ $(document).ready(function () {
       GMaps.geocode({
         address: $('#search').val(),
         callback: function(results, status) {
+          console.log(results);
           if (status == 'OK') {
             var position = results[0].geometry.location;
             map.setCenter(position.lat(), position.lng());
             map.addMarker({
               lat: position.lat(),
-              lng: position.lng()
+              lng: position.lng(),
+              title: 'Search Location',
+              infoWindow: {
+                content: '<p>'+ results[0].formatted_address +'</p>'
+              },
+              click: function(e) {
+                console.log('hit');
+              }
             });
             $('#search').val('');
           }
